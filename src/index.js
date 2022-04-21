@@ -1,13 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {compose, pipe} from "lodash/fp"
+
+function createStore(initialState) {
+    let state = initialState
+
+    function getState() {
+        return state
+    }
+
+    return {getState}
+}
+
+const store = createStore([{id: 1, description: "Task 1", completed: false}])
 
 const App = (params) => {
-    const [state, setState] = useState({})
-    // setState((prevState)=>({...prevState,id:"12131"}))
-    const obj1 = {id: 2, name: "some name", author: {name: "some name"}}
-    const obj2 = {...obj1, author: {...obj1.author}}//it will be new obj
-    console.log(obj1.author === obj2.author)
+    console.log(store.getState())
+
     return <h1>App</h1>
 
 
