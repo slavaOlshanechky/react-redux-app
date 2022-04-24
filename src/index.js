@@ -8,7 +8,7 @@ function taskReducer(state, action) {
             const elementIndex = newArray.findIndex(el => el.id === action.payload.id)
             newArray[elementIndex].completed = true
             return newArray
-            // break;
+        // break;
         default:
             break;
     }
@@ -29,29 +29,38 @@ function createStore(reducer, initialState) {
     return {getState, dispatch}
 }
 
-let store = createStore(taskReducer, [{id: 1, description: "Task 1", completed: false}])
+let store = createStore(taskReducer, [{id: 1, description: "Task 1", completed: false}, {
+    id: 2, description: "Task 2", completed: false
+}])
 
 const App = (params) => {
     console.log(store.getState())
-
-    const completeTask = () => {
+    const state = store.getState()
+    const completeTask = (taskId) => {
         store.dispatch({
             type: "task/completed",
-            payload: {id: 1}
+            payload: {id: taskId}
         })
 
         console.log(store.getState())
     }
     return <><h1>App</h1>
-        <button onClick={completeTask}>Completed</button>
+
+        <ul>
+            {state.map((el) => (<li key={el.id}>
+                    <p>{el.description}</p>
+                    <p>{`Completed: ${el.description}`}</p>
+                    <button onClick={()=>completeTask(el.id)}>Completed</button>
+                    <hr/>
+                </li>
+            ))}
+        </ul>
     </>
 
 
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <React.StrictMode>
-        <App/>
-    </React.StrictMode>
-);
+root.render(<React.StrictMode>
+    <App/>
+</React.StrictMode>);
 
