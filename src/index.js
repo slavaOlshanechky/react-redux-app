@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom/client';
-import {initiateStore} from "./store/store";
-import {taskCompleted, taskDeleted, titleChanged} from "./store/actions";
+import {taskCompleted, taskDeleted, titleChanged} from "./store/task/actions";
+import configureStore from "./store/store";
 
 
-let store = initiateStore()
+let store = configureStore()
 
 const App = (params) => {
     const [state, setState] = useState(store.getState())
@@ -25,7 +25,6 @@ const App = (params) => {
     }
 
     return <><h1>App</h1>
-
         <ul>
             {state.map((el) => (
                 <li key={el.id}>
