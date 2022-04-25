@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom/client';
 
 function taskReducer(state, action) {
@@ -8,7 +8,7 @@ function taskReducer(state, action) {
             const elementIndex = newArray.findIndex(el => el.id === action.payload.id)
             newArray[elementIndex].completed = true
             return newArray
-        // break;
+      // break;
         default:
             break;
     }
@@ -16,6 +16,7 @@ function taskReducer(state, action) {
 
 function createStore(reducer, initialState) {
     let state = initialState
+    let listeners = []
 
     function getState() {
         return state
@@ -23,34 +24,45 @@ function createStore(reducer, initialState) {
 
     function dispatch(action) {
         state = reducer(state, action)
-
+        for (let i = 0; i < listeners.length; i++) {
+            const listener = listeners[i]
+            listener()
+        }
     }
 
-    return {getState, dispatch}
+    function subscribe(listener) {
+        listeners.push(listener)
+    }
+
+    return {getState, dispatch, subscribe}
 }
 
-let store = createStore(taskReducer, [{id: 1, description: "Task 1", completed: false}, {
-    id: 2, description: "Task 2", completed: false
-}])
+let store = createStore(taskReducer, [
+    {id: 1, description: "Task 1", completed: false},
+    {id: 2, description: "Task 2", completed: false}
+])
 
 const App = (params) => {
-    console.log(store.getState())
-    const state = store.getState()
+    const [state,setState] = useState(store.getState())
+    useEffect(() => {
+        store.subscribe(() => {
+            setState(store.getState())
+        })
+    }, [])
     const completeTask = (taskId) => {
         store.dispatch({
             type: "task/completed",
             payload: {id: taskId}
         })
-
-        console.log(store.getState())
     }
     return <><h1>App</h1>
 
         <ul>
-            {state.map((el) => (<li key={el.id}>
+            {state.map((el) => (
+                <li key={el.id}>
                     <p>{el.description}</p>
-                    <p>{`Completed: ${el.description}`}</p>
-                    <button onClick={()=>completeTask(el.id)}>Completed</button>
+                    <p>{`Completed: ${el.completed}`}</p>
+                    <button onClick={() => completeTask(el.id)}>Completed</button>
                     <hr/>
                 </li>
             ))}
