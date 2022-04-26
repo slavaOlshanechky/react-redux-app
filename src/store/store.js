@@ -1,5 +1,5 @@
 import {createStore} from "redux";
-import {reducer} from "./task/reducer";
+import taskReducer from "./task";
 
 const initialState=[
     {id: 1, title: "Task 1", completed: false},
@@ -7,7 +7,7 @@ const initialState=[
 ]
 
 function configureStore() {
-    return createStore(reducer,initialState )
+    return createStore(taskReducer,initialState )
 }
 
 export default configureStore

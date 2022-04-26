@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom/client';
-import {taskCompleted, taskDeleted, titleChanged} from "./store/task/actions";
 import configureStore from "./store/store";
+import {taskCompleted, taskDeleted, titleChanged} from "./store/task";
 
 
 let store = configureStore()
