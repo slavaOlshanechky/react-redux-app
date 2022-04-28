@@ -2,33 +2,24 @@ import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom/client';
 import createStore from "./store/store";
 import {completeTask, getTasks, taskDeleted, titleChanged} from "./store/task";
-import {Provider} from "react-redux";
+import {Provider, useSelector} from "react-redux";
 
 
 let store = createStore()
 
 const App = (params) => {
-    const [state, setState] = useState(store.getState())
+    const state = useSelector((state) => state)
+
     useEffect(() => {
         store.dispatch(getTasks())
-        store.subscribe(() => {
-            setState(store.getState())
-        })
 
-        console.log("hello")
-
-        return () => {
-            console.log("hello from function")
-        };
+        // console.log("hello")
+        // return () => {
+        //     console.log("hello from function")
+        // };
 
     }, [])
 
-
-    // const completeTask = (taskId) => {
-    //     store.dispatch((dispatch, getState)=>{
-    //         store.dispatch(taskCompleted(taskId))
-    //     })
-    // }
     const changeTitle = (taskId) => {
         store.dispatch(titleChanged(taskId))
     }
