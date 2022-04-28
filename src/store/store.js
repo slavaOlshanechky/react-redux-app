@@ -1,4 +1,3 @@
-import {compose} from "redux";
 import taskReducer from "./task";
 import {logger} from "./middleware/logger";
 import {configureStore} from "@reduxjs/toolkit";
